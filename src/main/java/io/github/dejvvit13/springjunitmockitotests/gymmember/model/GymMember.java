@@ -18,6 +18,7 @@ public class GymMember {
 
     private String firstName;
     private String lastName;
+    private String email;
     private int yearsOfExperience;
 
     @OneToOne(mappedBy = "gymMember",cascade = CascadeType.ALL)
