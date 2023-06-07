@@ -11,6 +11,8 @@ public interface GymMemberRepository extends JpaRepository<GymMember, Long> {
 
     Optional<GymMember> findByEmail(String email);
 
+    boolean existsByEmail(String email);
+
     @Query("select g from GymMember g where g.firstName =?1 and g.lastName =?2")
     GymMember findByJPQL(String firstName, String lastName);
 
