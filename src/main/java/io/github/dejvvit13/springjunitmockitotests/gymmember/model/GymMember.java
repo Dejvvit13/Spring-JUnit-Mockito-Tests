@@ -4,6 +4,8 @@ import io.github.dejvvit13.springjunitmockitotests.personalrecord.model.Personal
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -18,9 +20,11 @@ public class GymMember {
 
     private String firstName;
     private String lastName;
+    private String email;
     private int yearsOfExperience;
+    private LocalDateTime lastVisit;
 
-    @OneToOne(mappedBy = "gymMember",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "gymMember", cascade = CascadeType.ALL)
     private PersonalRecord personalRecord;
 
     public GymMember(String firstName, String lastName, int yearsOfExperience, PersonalRecord personalRecord) {
@@ -28,5 +32,10 @@ public class GymMember {
         this.lastName = lastName;
         this.yearsOfExperience = yearsOfExperience;
         this.personalRecord = personalRecord;
+    }
+
+    @PrePersist
+    void prePersist() {
+        lastVisit = LocalDateTime.now();
     }
 }
