@@ -38,4 +38,9 @@ public class GymMemberServiceImpl implements GymMemberService {
     public GymMember updateGymMember(GymMember updatedGymMember) {
         return gymMemberRepository.save(updatedGymMember);
     }
+
+    @Override
+    public void deleteEmployee(Long id) {
+        gymMemberRepository.deleteById(id);
+    }
 }

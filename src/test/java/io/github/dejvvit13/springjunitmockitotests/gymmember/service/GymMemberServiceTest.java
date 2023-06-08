@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class GymMemberServiceTest {
@@ -111,6 +113,18 @@ class GymMemberServiceTest {
         GymMember updatedMember = gymMemberService.updateGymMember(gymMember1);
         // then - verify the output
         Assertions.assertThat(updatedMember.getFirstName()).isEqualTo("UpdatedGym");
+    }
+
+    @Test
+    @DisplayName("Delete GymMember")
+    void givenGymMemberId_whenDelete_thenNothing() {
+        // given - precondition or setup
+        Long gymMemberId = 1L;
+        willDoNothing().given(gymMemberRepository).deleteById(gymMemberId);
+        // when - action or the behaviour that we are going test
+        gymMemberService.deleteEmployee(gymMemberId);
+        // then - verify the output
+        verify(gymMemberRepository, times(1)).deleteById(gymMemberId);
     }
 
 

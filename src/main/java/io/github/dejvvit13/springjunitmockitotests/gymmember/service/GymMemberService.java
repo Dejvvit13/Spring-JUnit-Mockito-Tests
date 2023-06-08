@@ -14,4 +14,6 @@ public interface GymMemberService {
     Optional<GymMember> getGymMemberById(Long id);
 
     GymMember updateGymMember(GymMember updatedGymMember);
+
+    void deleteEmployee(Long id);
 }
