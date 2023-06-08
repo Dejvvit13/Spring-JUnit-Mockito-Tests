@@ -2,7 +2,16 @@ package io.github.dejvvit13.springjunitmockitotests.gymmember.service;
 
 import io.github.dejvvit13.springjunitmockitotests.gymmember.model.GymMember;
 
-public interface GymMemberService  {
+import java.util.List;
+import java.util.Optional;
 
-    GymMember createGymMember(GymMember gymMember);
+public interface GymMemberService {
+
+    GymMember saveGymMember(GymMember gymMember);
+
+    List<GymMember> getAllGymMembers();
+
+    Optional<GymMember> getGymMemberById(Long id);
+
+    GymMember updateGymMember(GymMember updatedGymMember);
 }
