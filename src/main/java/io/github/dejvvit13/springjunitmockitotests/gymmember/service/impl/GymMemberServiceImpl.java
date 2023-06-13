@@ -43,4 +43,6 @@ public class GymMemberServiceImpl implements GymMemberService {
     public void deleteEmployee(Long id) {
         gymMemberRepository.deleteById(id);
     }
+
+
 }
