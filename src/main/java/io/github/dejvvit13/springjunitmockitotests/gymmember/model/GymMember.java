@@ -24,15 +24,9 @@ public class GymMember {
     private int yearsOfExperience;
     private LocalDateTime lastVisit;
 
-    @OneToOne(mappedBy = "gymMember", cascade = CascadeType.ALL)
+    @Embedded
     private PersonalRecord personalRecord;
 
-    public GymMember(String firstName, String lastName, int yearsOfExperience, PersonalRecord personalRecord) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.yearsOfExperience = yearsOfExperience;
-        this.personalRecord = personalRecord;
-    }
 
     @PrePersist
     void prePersist() {
