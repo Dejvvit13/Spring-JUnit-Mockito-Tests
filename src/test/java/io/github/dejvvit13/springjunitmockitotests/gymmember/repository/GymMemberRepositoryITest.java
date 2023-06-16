@@ -1,5 +1,6 @@
 package io.github.dejvvit13.springjunitmockitotests.gymmember.repository;
 
+import io.github.dejvvit13.springjunitmockitotests.container.AbstractionBaseTest;
 import io.github.dejvvit13.springjunitmockitotests.gymmember.model.GymMember;
 import io.github.dejvvit13.springjunitmockitotests.personalrecord.model.PersonalRecord;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @DataJpaTest
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class GymMemberRepositoryITest {
+class GymMemberRepositoryITest extends AbstractionBaseTest {
 
     private final GymMemberRepository gymMemberRepository;
     GymMember gymMember1;
