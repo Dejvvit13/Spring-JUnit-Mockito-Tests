@@ -14,8 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
+
 import static org.hamcrest.CoreMatchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -71,5 +73,84 @@ class GymMemberControllerITests {
                 .andExpect(jsonPath("$.lastName", is(gymMember1.getLastName())))
                 .andExpect(jsonPath("$.email", is(gymMember1.getEmail())));
     }
-
+    @Test
+    @DisplayName("Get all Gym Members")
+    void given_whenGetAllGymMembers_thenReturnAllGymMembers() throws Exception {
+        // given - precondition or setup
+        gymMemberRepository.saveAll(List.of(gymMember1, gymMember2));
+        // when - action or the behaviour that we are going test
+        ResultActions response = mockMvc.perform(get("/api/gymMembers"));
+        // then - verify the output
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.size()", is(2)));
+    }
+    @Test
+    @DisplayName("Get Existing GymMember By Id")
+    void givenId_whenGetGymMemberById_thenReturnGymMember() throws Exception {
+        // given - precondition or setup
+        GymMember savedMember = gymMemberRepository.save(gymMember1);
+        // when - action or the behaviour that we are going test
+        ResultActions response = mockMvc.perform(get("/api/gymMembers/{id}", savedMember.getId()));
+        // then - verify the output
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", is(gymMember1.getFirstName())))
+                .andExpect(jsonPath("$.lastName", is(gymMember1.getLastName())))
+                .andExpect(jsonPath("$.email", is(gymMember1.getEmail())));
+    }
+    @Test
+    @DisplayName("Get non existing GymMember by id")
+    void givenId_whenGetGymMemberById_thenResponseStatusNotFound() throws Exception {
+        // given - precondition or setup
+        Long gymMemberId = 5L;
+        // when - action or the behaviour that we are going test
+        ResultActions response = mockMvc.perform(get("/api/gymMembers/{id}", gymMemberId));
+        // then - verify the output
+        response.andDo(print())
+                .andExpect(status().isNotFound());
+    }
+    @Test
+    @DisplayName("Update existing Gym Member")
+    void givenGymMember_whenUpdate_thenReturnUpdatedGymMember() throws Exception {
+        // given - precondition or setup
+        GymMember savedMember = gymMemberRepository.save(gymMember1);
+        // when - action or the behaviour that we are going test
+        ResultActions response = mockMvc.perform(put("/api/gymMembers/{id}", savedMember.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(gymMember2))
+        );
+        // then - verify the output
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", is(gymMember2.getFirstName())))
+                .andExpect(jsonPath("$.lastName", is(gymMember2.getLastName())))
+                .andExpect(jsonPath("$.email", is(gymMember2.getEmail())));
+    }
+    @Test
+    @DisplayName("Update non existing Gym Member")
+    void givenGymMember_whenUpdate_thenReturn404() throws Exception {
+        // given - precondition or setup
+        Long gymMemberId = 4L;
+        // when - action or the behaviour that we are going test
+        ResultActions response = mockMvc.perform(put("/api/gymMembers/{id}", gymMemberId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(gymMember2))
+        );
+        // then - verify the output
+        response.andDo(print())
+                .andExpect(status().isNotFound());
+    }
+    @Test
+    @DisplayName("Delete existing gym member")
+    void givenGymMemberId_whenDelete_thenReturn200() throws Exception {
+        // given - precondition or setup
+        GymMember savedMember = gymMemberRepository.save(gymMember1);
+        // when - action or the behaviour that we are going test
+        ResultActions response = mockMvc.perform(delete("/api/gymMembers/{id}", savedMember.getId()));
+        // then - verify the output
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", is("Deleted member with id: " + savedMember.getId())));
+    }
 }
